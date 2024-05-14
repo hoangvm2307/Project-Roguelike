@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
         Vector2Int newCell = currentCell + direction;
         Vector3 newPosition = new Vector3((newCell.x + 0.5f) * gridSize, (newCell.y + 0.5f) * gridSize, 0f);
 
-        Debug.Log("test");
+        Debug.Log("test2");
         transform.position = newPosition;
 
 
