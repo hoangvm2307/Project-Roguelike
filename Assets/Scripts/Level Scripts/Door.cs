@@ -18,6 +18,7 @@ public class Door : MonoBehaviour
         if(collision.tag.Equals("Player"))
         {
             PlayerController player = collision.gameObject.GetComponent<PlayerController>(); 
+
             // Get parent
             Room room = this.GetComponentInParent<Room>();
 
@@ -27,19 +28,19 @@ public class Door : MonoBehaviour
             switch (doorType)
             {
                 case DoorType.left:
-                    player.MovePlayer(Vector2Int.left * 5);
+                    player.MovePlayerThroughWall(Vector2Int.left * 5);
                     targetRoom = RoomController.instance.GetRoom(room.x - 1, room.y);
                     break;
                 case DoorType.right:
-                    player.MovePlayer(Vector2Int.right * 5);
+                    player.MovePlayerThroughWall(Vector2Int.right * 5);
                     targetRoom = RoomController.instance.GetRoom(room.x + 1, room.y);
                     break;
                 case DoorType.top:
-                    player.MovePlayer(Vector2Int.up * 3);
+                    player.MovePlayerThroughWall(Vector2Int.up * 3);
                     targetRoom = RoomController.instance.GetRoom(room.x, room.y + 1);
                     break;
                 case DoorType.bottom:
-                    player.MovePlayer(Vector2Int.down * 3);
+                    player.MovePlayerThroughWall(Vector2Int.down * 3);
                     targetRoom = RoomController.instance.GetRoom(room.x, room.y - 1);
                     break;
             }
