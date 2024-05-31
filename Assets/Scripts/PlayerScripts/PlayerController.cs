@@ -3,14 +3,24 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
     public float gridSize = 1f;
-    private Vector2Int currentCell;
+    public Vector2Int currentCell;
     public LayerMask collisionMask;
     public BoxCollider2D boxCollider;
+    private PlayerInteraction playerInteraction;
+    public delegate void OnPlayerMove();
+    public static event OnPlayerMove onPlayerMove;
+    
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
         currentCell = new Vector2Int(0, 0);
+        playerInteraction = GetComponent<PlayerInteraction>();
     }
 
     void Update()
@@ -36,10 +46,15 @@ public class PlayerController : MonoBehaviour
 
     public void MovePlayer(Vector2Int direction)
     {
+        onPlayerMove?.Invoke();
         Vector2Int newCell = currentCell + direction;
         Vector3 newPosition = new Vector3((newCell.x + 0.5f) * gridSize, (newCell.y + 0.5f) * gridSize, 0f);
 
-        if (!IsCellBlocked(newPosition, direction))
+        if (playerInteraction.IsEnemyAtPosition(newPosition))
+        {
+            playerInteraction.AttackEnemyAtPosition(newPosition);
+        }
+        else if (!IsCellBlocked(newPosition, direction))
         {
             StartCoroutine(JumpToPosition(newPosition));
             currentCell = newCell;
@@ -55,6 +70,8 @@ public class PlayerController : MonoBehaviour
             transform.position = newPosition;
             currentCell = newCell;
         }
+        transform.position = newPosition;
+        currentCell = newCell;
     }
     private bool IsCellBlocked(Vector3 newPosition, Vector2Int direction)
     {
@@ -70,7 +87,7 @@ public class PlayerController : MonoBehaviour
     {
         boxCollider.enabled = false;
         Vector3 startPos = transform.position;
-        float duration = 0.1f;
+        float duration = 0.075f;
 
         float elapsedTime = 0f;
         Vector3 midPoint = (startPos + endPosition) / 2f + Vector3.up * 0.5f; // Adjust the height of the jump here
