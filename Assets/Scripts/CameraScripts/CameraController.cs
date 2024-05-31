@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         }
 
         Vector3 targetPos = GetCameraTargetPosition();
-        targetPos = new Vector3(targetPos.x, targetPos.y, -10);
+        targetPos = new Vector3(targetPos.x, targetPos.y , -10);
         transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime * moveSpeedWhenRoomChange);
     }
 

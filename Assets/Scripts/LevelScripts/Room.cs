@@ -11,6 +11,7 @@ public class Room : MonoBehaviour
     private bool updatedDoors = false;
 
     public List<Door> doors = new List<Door>();
+    public List<GameObject> enemies = new List<GameObject>();
     void Start()
     {
         width = 18;

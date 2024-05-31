@@ -11,8 +11,8 @@ public class Door : MonoBehaviour
 
     public DoorType doorType;
     public GameObject wall;
+ 
 
-    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag.Equals("Player"))
@@ -52,4 +52,5 @@ public class Door : MonoBehaviour
          
         }
     }
+
 }

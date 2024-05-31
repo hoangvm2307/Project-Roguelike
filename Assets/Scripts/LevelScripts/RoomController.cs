@@ -20,6 +20,7 @@ public class RoomController : MonoBehaviour
     Queue<RoomInfo> loadRoomQueue = new Queue<RoomInfo>();
 
     public List<Room> loadedRooms = new List<Room>();
+    
 
     bool isLoadingRoom = false;
     bool spawnedBossRoom = false;
@@ -155,5 +156,8 @@ public class RoomController : MonoBehaviour
     public void OnPlayerEnterRoom(Room room)
     {
         CameraController.instance.currentRoom = room;
+        MinimapController.instance.currentRoom = room;
+        room.enemies.ForEach(e => e.gameObject.SetActive(true));
+        
     }
 }
