@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a83a96b0b972d44aa73a6ac1da4bb8c, type: 3}
+  m_Name: BookOfFire
+  m_EditorClassIdentifier: 
+  itemName: Book Of Fire
+  damage: 2
+  description: Book Of Fire
+  sprite: {fileID: -1796371120, guid: e020d83499a4f40488b10b1b69e954ba, type: 3}
+  maxStack: 0
+  type: 3
+  prefab: {fileID: 1475682797652201997, guid: 2bbf65309d9b67246b9346b2d2d34116, type: 3}
+  specialSkillEffect: {fileID: 0}

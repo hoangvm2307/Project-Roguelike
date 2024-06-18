@@ -21,7 +21,7 @@ public class PlayerInteraction : MonoBehaviour
         return false;
     }
 
-    public void AttackEnemyAtPosition(Vector3 position)
+    public void AttackEnemyAtPosition(Vector3 position, int damage)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.1f);
 
@@ -30,12 +30,12 @@ public class PlayerInteraction : MonoBehaviour
             if (collider.CompareTag("Enemy"))
             {
 
-                Destroy(collider.gameObject);
-                Debug.Log("Enemy destroyed");
+                GameObject enemy = collider.gameObject;
+                enemy.GetComponent<EnemyHealth>().TakeDamage(damage);
 
                 if (cameraShake != null)
                 {
-                    StartCoroutine(cameraShake.Shake(.15f, 0.2f));
+                    StartCoroutine(cameraShake.Shake());
                 }
                 break;
             }

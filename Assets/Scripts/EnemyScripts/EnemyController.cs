@@ -1,3 +1,5 @@
+using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +12,8 @@ public class EnemyController : MonoBehaviour
     public BoxCollider2D boxCollider;
     public Transform playerTransform;
     public float moveDelay = 1f; // Time between each move
-
+    public GameObject slash;
+    public int damage;
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
@@ -28,28 +31,58 @@ public class EnemyController : MonoBehaviour
     }
     private IEnumerator MoveTowardsPlayer()
     {
-        while (true)
+        while (playerTransform)
         {
             yield return new WaitForSeconds(moveDelay);
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (playerTransform)
             {
                 List<Vector2Int> path = FindPathToPlayer();
+                //Vector2Int playerCell = new Vector2Int(Mathf.RoundToInt(playerTransform.position.x / gridSize), Mathf.RoundToInt(playerTransform.position.y / gridSize));
                 if (path != null && path.Count > 1)
                 {
                     Vector2Int nextCell = path[1];
                     // Check if the next cell is the player's current cell
-                    Vector2Int playerCell = new Vector2Int(Mathf.RoundToInt(playerTransform.position.x / gridSize), Mathf.RoundToInt(playerTransform.position.y / gridSize));
+
                     if (nextCell != playerTransform.GetComponent<PlayerController>().currentCell)
                     {
                         MoveEnemy(nextCell - currentCell);
                     }
+                    else
+                    {
+                        AttackPlayerAtPosition(playerTransform.GetComponent<PlayerController>().currentCell);
+                    }
                 }
-            }
 
+            }
+        }
+    }
+    public void AttackPlayerAtPosition(Vector2Int position)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector3(position.x + 0.5f, position.y + 0.5f), 0.1f);
+
+        foreach (var collider in colliders)
+        {
+            if (collider.CompareTag("Player"))
+            {
+
+                GameObject player = collider.gameObject;
+                HealthUIManager.Instance.TakeDamage(damage);
+
+                //if (cameraShake != null)
+                //{
+                //    StartCoroutine(cameraShake.Shake());
+                //}
+                GameObject _slash = GameObject.Instantiate(slash, new Vector3(position.x + 0.5f, position.y + 0.5f), Quaternion.identity);
+
+                break;
+            }
         }
 
-
+    }
+    private void Attack(Vector2Int target)
+    {
+        GameObject _slash = GameObject.Instantiate(slash, new Vector3(target.x + 0.5f, target.y + 0.5f), Quaternion.identity);
     }
 
     private List<Vector2Int> FindPathToPlayer()

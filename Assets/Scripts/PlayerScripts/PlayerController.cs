@@ -15,7 +15,17 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction playerInteraction;
     public delegate void OnPlayerMove();
     public static event OnPlayerMove onPlayerMove;
-    
+    public GameObject slash;
+
+    private void OnEnable()
+    {
+         
+    }
+    private void OnDisable()
+    {
+       
+    }
+ 
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
@@ -25,25 +35,40 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
+        ControlPlayerMove();
+    }
+    public void ControlPlayerMove()
+    {
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
-            MovePlayer(Vector2Int.right);
+            if (RhythmManager.Instance.IsPlayerHit())
+            {
+                MovePlayer(Vector2Int.right);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
-            MovePlayer(Vector2Int.left);
+            if (RhythmManager.Instance.IsPlayerHit())
+            {
+                MovePlayer(Vector2Int.left);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
-            MovePlayer(Vector2Int.up);
+            if (RhythmManager.Instance.IsPlayerHit())
+            {
+                MovePlayer(Vector2Int.up);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
-            MovePlayer(Vector2Int.down);
+            if (RhythmManager.Instance.IsPlayerHit())
+            {
+                MovePlayer(Vector2Int.down);
+            }
         }
-    }
 
+    }
     public void MovePlayer(Vector2Int direction)
     {
         onPlayerMove?.Invoke();
@@ -52,7 +77,9 @@ public class PlayerController : MonoBehaviour
 
         if (playerInteraction.IsEnemyAtPosition(newPosition))
         {
-            playerInteraction.AttackEnemyAtPosition(newPosition);
+            playerInteraction.AttackEnemyAtPosition(newPosition, GetWeaponDamage());
+            GameObject _slash = GameObject.Instantiate(slash, newPosition, Quaternion.identity);
+            AdjustSlashDirection(_slash, direction);
         }
         else if (!IsCellBlocked(newPosition, direction))
         {
@@ -60,6 +87,7 @@ public class PlayerController : MonoBehaviour
             currentCell = newCell;
         }
     }
+
     public void MovePlayerThroughWall(Vector2Int direction)
     {
         Vector2Int newCell = currentCell + direction;
@@ -106,5 +134,25 @@ public class PlayerController : MonoBehaviour
         boxCollider.enabled = true;
         transform.position = endPosition;
     }
+    public void AdjustSlashDirection(GameObject _slash, Vector2Int direction)
+    {
+        if (direction == Vector2Int.right)
+            _slash.GetComponent<SpriteRenderer>().flipX = true;
+        if (direction == Vector2Int.up)
+            _slash.transform.rotation = Quaternion.Euler(0, 0, -90f);
+        if (direction == Vector2Int.left)
+            _slash.GetComponent<SpriteRenderer>().flipX = false;
+        if (direction == Vector2Int.down)
+            _slash.transform.rotation = Quaternion.Euler(0, 0, 90f);
+    }
 
+    private int GetWeaponDamage()
+    {
+        ItemData currentWeaponData = InventoryManager.Instance.currentWeapon;
+        if (currentWeaponData != null)
+        {
+            return currentWeaponData.damage;
+        }
+        return 0;  
+    }
 }
