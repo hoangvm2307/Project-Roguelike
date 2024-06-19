@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
     public static CameraController instance;
     public Room currentRoom;
     public float moveSpeedWhenRoomChange;
-
+    public float offset;
     private void Awake()
     {
         instance = this;
@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         }
 
         Vector3 targetPos = GetCameraTargetPosition();
-        targetPos = new Vector3(targetPos.x, targetPos.y , -10);
+        targetPos = new Vector3(targetPos.x, targetPos.y - offset, -10);
         transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime * moveSpeedWhenRoomChange);
     }
 
