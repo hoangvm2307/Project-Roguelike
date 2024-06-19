@@ -104,7 +104,9 @@ public class RoomController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         if (loadRoomQueue.Count == 0)
         {
-            Room tempRoom = loadedRooms[loadedRooms.Count - 1];
+            Room bossRoom = loadedRooms[loadedRooms.Count - 1];
+            Room tempRoom = new Room(bossRoom.x, bossRoom.y);
+            Destroy(bossRoom.gameObject) ;
             var roomToRemove = loadedRooms.Single(r => r.x == tempRoom.x && r.y == tempRoom.y);
             loadedRooms.Remove(roomToRemove);
             LoadRoom("End", tempRoom.x, tempRoom.y);
@@ -125,7 +127,7 @@ public class RoomController : MonoBehaviour
             room.y = currentLoadRoomData.y;
             room.name = currentWorldName + "-" + currentLoadRoomData.name + " " + room.x + ", " + room.y;
             room.transform.parent = transform;
-
+            room.sceneName = SceneManager.GetSceneAt(SceneManager.sceneCount - 1).name;
             isLoadingRoom = false;
 
             if (loadedRooms.Count == 0)
@@ -133,7 +135,6 @@ public class RoomController : MonoBehaviour
                 CameraController.instance.currentRoom = room;
             }
             loadedRooms.Add(room);
-
         }
         else
         {
@@ -159,5 +160,26 @@ public class RoomController : MonoBehaviour
         MinimapController.instance.currentRoom = room;
         room.enemies.ForEach(e => e.gameObject.SetActive(true));
         
+    }
+    public void ClearRooms()
+    {
+        StartCoroutine(ClearRoomsRoutine());
+    }
+
+    private IEnumerator ClearRoomsRoutine()
+    {
+        foreach (var room in loadedRooms)
+        {
+            // Unload the scene
+            AsyncOperation unloadScene = SceneManager.UnloadSceneAsync(room.sceneName);
+            while (!unloadScene.isDone)
+            {
+                yield return null;
+            }
+
+            // Destroy the room GameObject
+            Destroy(room.gameObject);
+        }
+        loadedRooms.Clear();
     }
 }

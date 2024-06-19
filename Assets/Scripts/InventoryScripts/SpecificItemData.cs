@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewSpecificItemData", menuName = "Inventory/SpecificItemData")]
+[CreateAssetMenu(fileName = "NewSpecificItemData", menuName = "ScriptableObjects/Inventory/SpecificItemData")]
 public class SpecificItemData : ItemData
 {
     public GameObject specialSkillEffect; 

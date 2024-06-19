@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorType: 0
-  wall: {fileID: 0}
+  wall: {fileID: 1588070804505840389}
 --- !u!61 &3632843753380025124
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -558,7 +558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorType: 3
-  wall: {fileID: 0}
+  wall: {fileID: 4596088692603141829}
 --- !u!61 &5717304426920803806
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1481,8 +1481,8 @@ Tilemap:
   - first: {x: 7, y: 3, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 7
-      m_TileSpriteIndex: 9
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1498,14 +1498,14 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 80
+  - m_RefCount: 81
     m_Data: {fileID: 11400000, guid: 29ddd3438ca40bd42b80665bb2655d71, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: 82522770403d26b45a1906f83e851e28, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 2
@@ -1519,7 +1519,7 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 80
+  - m_RefCount: 81
     m_Data: {fileID: 1017897217, guid: 31b2c4d7bc506ee4db51134ecd2a2472, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -1529,8 +1529,8 @@ Tilemap:
     m_Data: {fileID: 1891028106, guid: 31b2c4d7bc506ee4db51134ecd2a2472, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: -1714182008, guid: 42a3cf5ab627018489d21045950fd620, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileMatrixArray:
   - m_RefCount: 83
     m_Data:
@@ -1638,6 +1638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468c40fd3a32c31419a23998b27ada77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneName: 
   doors: []
   enemies: []
 --- !u!1 &2944013506480198064
@@ -4085,7 +4086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorType: 2
-  wall: {fileID: 0}
+  wall: {fileID: 5337854025344160856}
 --- !u!61 &386467785389675542
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4300,7 +4301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorType: 1
-  wall: {fileID: 0}
+  wall: {fileID: 7785919097855710905}
 --- !u!61 &7370749827799172495
 BoxCollider2D:
   m_ObjectHideFlags: 0

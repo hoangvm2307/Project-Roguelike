@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewHealthItem", menuName = "Inventory/HealthItem")]
+[CreateAssetMenu(fileName = "NewHealthItem", menuName = "ScriptableObjects/Inventory/HealthItem")]
 public class HealthItemData : ItemData
 {
     public int healthIncreaseAmount;

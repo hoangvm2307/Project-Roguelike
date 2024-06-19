@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        ControlPlayerMove();
+        //ControlPlayerMove();
     }
     public void ControlPlayerMove()
     {
@@ -87,7 +87,18 @@ public class PlayerController : MonoBehaviour
             currentCell = newCell;
         }
     }
+    public void AttackEnemy(Vector2Int direction)
+    {
+        Vector2Int newCell = currentCell + direction;
+        Vector3 newPosition = new Vector3((newCell.x + 0.5f) * gridSize, (newCell.y + 0.5f) * gridSize, 0f);
 
+        if (playerInteraction.IsEnemyAtPosition(newPosition))
+        {
+            playerInteraction.AttackEnemyAtPosition(newPosition, GetWeaponDamage());
+            GameObject _slash = GameObject.Instantiate(slash, newPosition, Quaternion.identity);
+            AdjustSlashDirection(_slash, direction);
+        }
+    }
     public void MovePlayerThroughWall(Vector2Int direction)
     {
         Vector2Int newCell = currentCell + direction;

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Dragoncrest Helmet
   damage: 0
   description: 
-  icon: {fileID: 0}
+  sprite: {fileID: 99308247, guid: 32f9065ee9eff784dbf187e7a5ed0153, type: 3}
   maxStack: 1
   type: 0
   prefab: {fileID: 7206440647554083819, guid: 7d015beae0a829c429b1efddcce52aed, type: 3}

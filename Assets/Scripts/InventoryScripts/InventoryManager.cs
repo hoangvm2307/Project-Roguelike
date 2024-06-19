@@ -15,6 +15,10 @@ public class InventoryManager : MonoBehaviour
     public Image spellImage;
     public Image weaponImage;
 
+    [Header("Coin")]
+    public int coinCount;
+    public Text coinText;
+
     [Header("Current Inventory")]
     public ItemData currentItem;
     public ItemData currentWeapon;
@@ -137,6 +141,11 @@ public class InventoryManager : MonoBehaviour
                 break;
 
         }
+    }
+    public void AddCoin()
+    {
+        coinCount++;
+        coinText.text = coinCount.ToString();
     }
     #region Inventory, Equipments, Weapons, Spells, Items Open Close
     public void OpenInventory()
