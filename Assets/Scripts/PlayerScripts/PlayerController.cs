@@ -29,46 +29,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
-        currentCell = new Vector2Int(0, 0);
+        currentCell = new Vector2Int(1, 0);
         playerInteraction = GetComponent<PlayerInteraction>();
     }
 
-    void Update()
-    {
-        //ControlPlayerMove();
-    }
-    public void ControlPlayerMove()
-    {
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.right);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.left);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.up);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.down);
-            }
-        }
-
-    }
     public void MovePlayer(Vector2Int direction)
     {
         onPlayerMove?.Invoke();
@@ -122,7 +86,7 @@ public class PlayerController : MonoBehaviour
         return hit.collider != null;
     }
 
-    private IEnumerator JumpToPosition(Vector3 endPosition)
+    public IEnumerator JumpToPosition(Vector3 endPosition)
     {
         boxCollider.enabled = false;
         Vector3 startPos = transform.position;

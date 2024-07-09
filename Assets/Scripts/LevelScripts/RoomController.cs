@@ -13,14 +13,14 @@ public class RoomController : MonoBehaviour
 {
     public static RoomController instance;
 
-    string currentWorldName = "Basement";
+    string currentWorldName = "";
 
     RoomInfo currentLoadRoomData;
 
     Queue<RoomInfo> loadRoomQueue = new Queue<RoomInfo>();
 
     public List<Room> loadedRooms = new List<Room>();
-    
+
 
     bool isLoadingRoom = false;
     bool spawnedBossRoom = false;
@@ -106,10 +106,12 @@ public class RoomController : MonoBehaviour
         {
             Room bossRoom = loadedRooms[loadedRooms.Count - 1];
             Room tempRoom = new Room(bossRoom.x, bossRoom.y);
-            Destroy(bossRoom.gameObject) ;
+            Destroy(bossRoom.gameObject);
             var roomToRemove = loadedRooms.Single(r => r.x == tempRoom.x && r.y == tempRoom.y);
             loadedRooms.Remove(roomToRemove);
-            LoadRoom("End", tempRoom.x, tempRoom.y);
+            int variant = Random.Range(1, 2);
+            string bossRoomName = RoomName.GetRoomName(RoomName.Boss, DungeonManager.Instance.currentFloor, variant);
+            LoadRoom(bossRoomName, tempRoom.x, tempRoom.y);
         }
     }
 
@@ -159,7 +161,6 @@ public class RoomController : MonoBehaviour
         CameraController.instance.currentRoom = room;
         MinimapController.instance.currentRoom = room;
         room.enemies.ForEach(e => e.gameObject.SetActive(true));
-        
     }
     public void ClearRooms()
     {

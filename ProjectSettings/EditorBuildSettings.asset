@@ -5,19 +5,37 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Dungeon Rooms/BasementMain.unity
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Main.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Dungeon Rooms/BasementStart.unity
+    path: Assets/Scenes/Dungeon Rooms/Level1/Start/Level1_Start_1.unity
     guid: 4e6ef6edd0a5fff408e070e519cc6054
   - enabled: 1
-    path: Assets/Scenes/Dungeon Rooms/BasementEmpty.unity
-    guid: dd8edafc76cecc046adb400316463146
-  - enabled: 1
-    path: Assets/Scenes/Dungeon Rooms/BasementEnd.unity
+    path: Assets/Scenes/Dungeon Rooms/Level1/Boss/Level1_Boss_1.unity
     guid: d47c1e47c3785814f897be26936e0ba3
   - enabled: 1
-    path: Assets/Scenes/Dungeon Rooms/BasementEmpty.unity
+    path: Assets/Scenes/Dungeon Rooms/Level1/Empty/Level1_Empty_1.unity
     guid: 9ace6235fc0b6e54e92fb2af4eb7440e
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Level1/Enemy/Level1_Enemy_1.unity
+    guid: a59a66450e7e48541a3d66081c1c4dd9
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Level1/Start/Level1_Start_2.unity
+    guid: fff6cda6d03f6bf4c8c86bd4ae26d857
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Level1/Treasure/Level1_Treasure_1.unity
+    guid: 9154ab7ef12391f4faa21797ae7e9b2e
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Level1/Treasure/Level1_Treasure_2.unity
+    guid: a322e60314e133b4d95bf11258f93036
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Level1/Enemy/Level1_Enemy_2.unity
+    guid: cce0cde1f69894c4b9b46df83b4cd110
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Level2/Start/Level2_Start_1.unity
+    guid: 3de88803eb2f2a342af90cd7145f909f
+  - enabled: 1
+    path: Assets/Scenes/Dungeon Rooms/Menu.unity
+    guid: 700e4b40bc1dee142ace374ff6c15bbf
   m_configObjects: {}

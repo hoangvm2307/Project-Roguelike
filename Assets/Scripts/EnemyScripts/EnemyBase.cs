@@ -1,124 +1,123 @@
-using Cinemachine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public abstract class EnemyBase : MonoBehaviour
 {
     public float gridSize = 1f;
-    private Vector2Int currentCell;
+    protected Vector2Int currentCell;
     public LayerMask collisionMask;
     public BoxCollider2D boxCollider;
-    public Transform playerTransform;
+    public PlayerController player;
     public float moveDelay = 1f; // Time between each move
     public GameObject slash;
     public int damage;
     void Start()
     {
+        player = PlayerController.Instance;
         boxCollider = GetComponent<BoxCollider2D>();
         currentCell = new Vector2Int(Mathf.RoundToInt(transform.position.x / gridSize), Mathf.RoundToInt(transform.position.y / gridSize));
+        EnemyManager.Instance.OccupyPosition(currentCell);
         StartCoroutine(MoveTowardsPlayer());
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
-    private void OnEnable()
-    {
-        PlayerController.onPlayerMove += UpdatePlayerPosition;
-    }
-    private void OnDisable()
-    {
-        PlayerController.onPlayerMove -= UpdatePlayerPosition;
-    }
-    private IEnumerator MoveTowardsPlayer()
-    {
-        while (playerTransform)
-        {
-            yield return new WaitForSeconds(moveDelay);
-            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-            if (playerTransform)
-            {
-                List<Vector2Int> path = FindPathToPlayer();
-                //Vector2Int playerCell = new Vector2Int(Mathf.RoundToInt(playerTransform.position.x / gridSize), Mathf.RoundToInt(playerTransform.position.y / gridSize));
-                if (path != null && path.Count > 1)
-                {
-                    Vector2Int nextCell = path[1];
-                    // Check if the next cell is the player's current cell
 
-                    if (nextCell != playerTransform.GetComponent<PlayerController>().currentCell)
-                    {
-                        MoveEnemy(nextCell - currentCell);
-                    }
-                    else
-                    {
-                        AttackPlayerAtPosition(playerTransform.GetComponent<PlayerController>().currentCell);
-                    }
-                }
+    protected void OnEnable()
+    {
 
-            }
-        }
     }
+
+    protected void OnDisable()
+    {
+        EnemyManager.Instance.VacatePosition(currentCell);
+    }
+
+    protected abstract IEnumerator MoveTowardsPlayer();
+
     public void AttackPlayerAtPosition(Vector2Int position)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector3(position.x + 0.5f, position.y + 0.5f), 0.1f);
-
         foreach (var collider in colliders)
         {
-            if (collider.CompareTag("Player"))
+            if (collider.CompareTag(TagName.Player))
             {
-
                 GameObject player = collider.gameObject;
                 HealthUIManager.Instance.TakeDamage(damage);
-
-                //if (cameraShake != null)
-                //{
-                //    StartCoroutine(cameraShake.Shake());
-                //}
-                GameObject _slash = GameObject.Instantiate(slash, new Vector3(position.x + 0.5f, position.y + 0.5f), Quaternion.identity);
-
+                if(CameraShake.Instance != null)
+                {
+                    StartCoroutine(CameraShake.Instance.Shake()); 
+                }
+                GameObject _slash = Instantiate(slash, new Vector3(position.x + 0.5f, position.y + 0.5f), Quaternion.identity);
                 break;
             }
         }
-
     }
-    private void Attack(Vector2Int target)
+    protected Vector2Int GetRandomWalkableNeighbor(Vector2Int cell)
     {
-        GameObject _slash = GameObject.Instantiate(slash, new Vector3(target.x + 0.5f, target.y + 0.5f), Quaternion.identity);
+        List<Vector2Int> neighbors = GetShuffledNeighbors(cell);
+        foreach (Vector2Int neighbor in neighbors)
+        {
+            Vector3 newPosition = new Vector3((neighbor.x + 0.5f) * gridSize, (neighbor.y + 0.5f) * gridSize, 0f);
+            if (!IsCellBlocked(newPosition) && !EnemyManager.Instance.IsPositionOccupied(neighbor))
+            {
+                return neighbor;
+            }
+        }
+        return cell; // Return current cell if no valid neighbor found (shouldn't normally happen)
     }
 
-    private List<Vector2Int> FindPathToPlayer()
+    protected List<Vector2Int> GetShuffledNeighbors(Vector2Int cell)
     {
-        //Vector2Int playerCell = new Vector2Int(Mathf.RoundToInt(playerTransform.position.x / gridSize), Mathf.RoundToInt(playerTransform.position.y / gridSize));
-        if (!playerTransform) return null;
-        return AStarPathfinding(currentCell, playerTransform.GetComponent<PlayerController>().currentCell);
+        List<Vector2Int> neighbors = new List<Vector2Int>
+    {
+        cell + Vector2Int.right,
+        cell + Vector2Int.left,
+        cell + Vector2Int.up,
+        cell + Vector2Int.down
+    };
+
+        for (int i = 0; i < neighbors.Count; i++)
+        {
+            int randomIndex = Random.Range(i, neighbors.Count);
+            Vector2Int temp = neighbors[randomIndex];
+            neighbors[randomIndex] = neighbors[i];
+            neighbors[i] = temp;
+        }
+
+        return neighbors;
+    }
+    protected List<Vector2Int> FindPathToPlayer()
+    {
+        if (!player) return null;
+        return AStarPathfinding(currentCell, player.currentCell);
     }
 
-    private void MoveEnemy(Vector2Int direction)
+    protected void MoveEnemy(Vector2Int direction)
     {
         Vector2Int newCell = currentCell + direction;
         Vector3 newPosition = new Vector3((newCell.x + 0.5f) * gridSize, (newCell.y + 0.5f) * gridSize, 0f);
 
-        if (!IsCellBlocked(newPosition))
+        if (!EnemyManager.Instance.IsPositionOccupied(newCell))
         {
             StartCoroutine(JumpToPosition(newPosition));
+            EnemyManager.Instance.VacatePosition(currentCell);
             currentCell = newCell;
+            EnemyManager.Instance.OccupyPosition(currentCell);
         }
     }
 
-    private bool IsCellBlocked(Vector3 newPosition)
+    protected virtual bool IsCellBlocked(Vector3 newPosition)
     {
         Vector2 origin = new Vector2(transform.position.x, transform.position.y);
-        Vector2 direction = new Vector2(newPosition.x - origin.x, newPosition.y - origin.y);
-
+        Vector2 direction = newPosition - (Vector3)origin;
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, direction.magnitude, collisionMask);
         return hit.collider != null;
     }
 
-    private IEnumerator JumpToPosition(Vector3 endPosition)
+    protected IEnumerator JumpToPosition(Vector3 endPosition)
     {
         boxCollider.enabled = false;
         Vector3 startPos = transform.position;
         float duration = 0.075f;
-
         float elapsedTime = 0f;
         Vector3 midPoint = (startPos + endPosition) / 2f + Vector3.up * 0.5f; // Adjust the height of the jump here
 
@@ -126,18 +125,17 @@ public class EnemyController : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
-
-            // Quadratic Bezier curve for smooth jump
             Vector3 currentPosition = Vector3.Lerp(Vector3.Lerp(startPos, midPoint, t), Vector3.Lerp(midPoint, endPosition, t), t);
             transform.position = currentPosition;
-
             yield return null;
         }
+
         boxCollider.enabled = true;
         transform.position = endPosition;
     }
 
-    private List<Vector2Int> AStarPathfinding(Vector2Int start, Vector2Int goal)
+    #region PathFinding
+    protected List<Vector2Int> AStarPathfinding(Vector2Int start, Vector2Int goal)
     {
         List<Vector2Int> openSet = new List<Vector2Int> { start };
         HashSet<Vector2Int> closedSet = new HashSet<Vector2Int>();
@@ -148,24 +146,14 @@ public class EnemyController : MonoBehaviour
         while (openSet.Count > 0)
         {
             Vector2Int current = GetLowestFScoreNode(openSet, fScore);
-
-            if (current == goal)
-            {
-                return ReconstructPath(cameFrom, current);
-            }
-
+            if (current == goal) return ReconstructPath(cameFrom, current);
             openSet.Remove(current);
             closedSet.Add(current);
 
             foreach (Vector2Int neighbor in GetNeighbors(current))
             {
-                if (closedSet.Contains(neighbor))
-                {
-                    continue;
-                }
-
+                if (closedSet.Contains(neighbor)) continue;
                 float tentativeGScore = gScore[current] + HeuristicCostEstimate(current, neighbor);
-
                 if (!openSet.Contains(neighbor))
                 {
                     openSet.Add(neighbor);
@@ -174,17 +162,15 @@ public class EnemyController : MonoBehaviour
                 {
                     continue;
                 }
-
                 cameFrom[neighbor] = current;
                 gScore[neighbor] = tentativeGScore;
                 fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, goal);
             }
         }
-
         return null; // No path found
     }
 
-    private List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
+    protected List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
     {
         List<Vector2Int> totalPath = new List<Vector2Int> { current };
         while (cameFrom.ContainsKey(current))
@@ -195,7 +181,7 @@ public class EnemyController : MonoBehaviour
         return totalPath;
     }
 
-    private Vector2Int GetLowestFScoreNode(List<Vector2Int> openSet, Dictionary<Vector2Int, float> fScore)
+    protected Vector2Int GetLowestFScoreNode(List<Vector2Int> openSet, Dictionary<Vector2Int, float> fScore)
     {
         Vector2Int lowest = openSet[0];
         foreach (Vector2Int node in openSet)
@@ -208,13 +194,12 @@ public class EnemyController : MonoBehaviour
         return lowest;
     }
 
-    private float HeuristicCostEstimate(Vector2Int a, Vector2Int b)
+    protected float HeuristicCostEstimate(Vector2Int a, Vector2Int b)
     {
-        // Using Manhattan distance
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y); // Using Manhattan distance
     }
 
-    private List<Vector2Int> GetNeighbors(Vector2Int cell)
+    protected List<Vector2Int> GetNeighbors(Vector2Int cell)
     {
         List<Vector2Int> neighbors = new List<Vector2Int>
         {
@@ -223,21 +208,18 @@ public class EnemyController : MonoBehaviour
             cell + Vector2Int.up,
             cell + Vector2Int.down
         };
-
-        // Remove blocked neighbors
-        neighbors.RemoveAll(neighbor => IsCellBlocked(new Vector3((neighbor.x + 0.5f) * gridSize, (neighbor.y + 0.5f) * gridSize, 0f)));
-
         return neighbors;
     }
-    private Vector2Int SnapToGrid(Vector3 position)
+
+ 
+    private Vector3 debugCellWorldPosition;
+    #endregion
+    void OnDrawGizmos()
     {
-        int x = Mathf.RoundToInt(position.x / gridSize);
-        int y = Mathf.RoundToInt(position.y / gridSize);
-        return new Vector2Int(x, y);
-    }
-    public void UpdatePlayerPosition()
-    {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        //StartCoroutine(MoveTowardsPlayer());
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawCube(debugCellWorldPosition, new Vector3(gridSize, gridSize, 0));
+        }
     }
 }

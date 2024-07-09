@@ -17,16 +17,33 @@ public class UIManager : MonoBehaviour
     public Image itemImage;
     public float displayTime = 2f;
     public float yOffset = 50f;
+    public CanvasGroup canvasGroup;
+    [Header("End Game UI")]
+    public GameObject endGameUI;
+ 
+
     void Start()
     {
         pickedUpItemPanel.SetActive(false); 
+        canvasGroup = endGameUI.GetComponent<CanvasGroup>();
+        
+        canvasGroup.alpha = 0f; 
+        endGameUI.SetActive(false);
+    
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
+    public void ShowEndGame()
+    {
+        endGameUI.SetActive(true);
+
+        canvasGroup.DOFade(1f, 1f);
+    }
+    
     public void ShowRhythmBar()
     {
         rhythmBar.SetActive(true);

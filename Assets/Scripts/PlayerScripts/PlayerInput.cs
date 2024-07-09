@@ -78,6 +78,7 @@ public class PlayerInput : MonoBehaviour
                 InventoryManager.Instance.CloseItems();
                 InventoryManager.Instance.CloseEquipments();
                 InventoryManager.Instance.CloseSpells();
+                InventoryManager.Instance.CloseInventoryBar();
                 InventoryManager.Instance.CloseWeapons();
                 //InventoryManager.Instance.CloseItemSwiper();
 
@@ -96,7 +97,7 @@ public class PlayerInput : MonoBehaviour
             {
                 InventoryManager.Instance.currentType = ItemType.Weapon;
                 InventoryManager.Instance.OpenWeapons();
-
+                InventoryManager.Instance.OpenInventoryBar();
                 InventoryManager.Instance.CloseInventory();
                 InventoryManager.Instance.isInventoryOpen = false;
             }
@@ -106,6 +107,7 @@ public class PlayerInput : MonoBehaviour
             if (InventoryManager.Instance.isInventoryOpen)
             {
                 InventoryManager.Instance.currentType = ItemType.Item;
+                InventoryManager.Instance.OpenInventoryBar();
                 InventoryManager.Instance.OpenItems();
                 InventoryManager.Instance.CloseInventory();
                 InventoryManager.Instance.isInventoryOpen = false;
@@ -117,6 +119,7 @@ public class PlayerInput : MonoBehaviour
             if (InventoryManager.Instance.isInventoryOpen)
             {
                 InventoryManager.Instance.currentType = ItemType.Spell;
+                InventoryManager.Instance.OpenInventoryBar();
                 InventoryManager.Instance.OpenSpells();
                 InventoryManager.Instance.CloseInventory();
                 InventoryManager.Instance.isInventoryOpen = false;
@@ -129,6 +132,7 @@ public class PlayerInput : MonoBehaviour
             {
                 InventoryManager.Instance.currentType = ItemType.Equipment;
                 InventoryManager.Instance.OpenEquipments();
+                InventoryManager.Instance.OpenInventoryBar();
                 InventoryManager.Instance.CloseInventory();
                 InventoryManager.Instance.isInventoryOpen = false;
 

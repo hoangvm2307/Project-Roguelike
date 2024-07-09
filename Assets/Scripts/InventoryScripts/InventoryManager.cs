@@ -32,6 +32,7 @@ public class InventoryManager : MonoBehaviour
     public Transform items;
     public Transform weapons;
     public GameObject inventoryTab;
+    public GameObject inventoryBar;
     public event Action OnChangedItem;
     public bool isInventoryOpen;
     private void Awake()
@@ -41,7 +42,7 @@ public class InventoryManager : MonoBehaviour
     }
     private void Start()
     {
-
+        currentWeapon = equipments.GetChild(0).GetComponent<ItemComponent>().itemData; 
     }
     public List<Item> GetList()
     {
@@ -164,7 +165,14 @@ public class InventoryManager : MonoBehaviour
     {
         weapons.gameObject.SetActive(false);
     }
- 
+    public void OpenInventoryBar()
+    {
+        inventoryBar.SetActive(true);
+    }
+    public void CloseInventoryBar()
+    {
+        inventoryBar.SetActive(false);
+    }
     public void OpenSpells()
     {
         spells.gameObject.SetActive(true);
