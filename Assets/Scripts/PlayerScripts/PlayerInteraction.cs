@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerInteraction : MonoBehaviour
 {
     private CameraShake cameraShake;
-    public CameraController cameraController;
     private void Start()
     {
         cameraShake = Camera.main.GetComponent<CameraShake>();

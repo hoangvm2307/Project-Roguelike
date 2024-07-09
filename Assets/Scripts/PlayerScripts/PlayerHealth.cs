@@ -14,9 +14,10 @@ public class PlayerHealth : ScriptableObject
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        if (currentHealth < 0)
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
+            UIManager.Instance.ShowEndGame();
             //Notify Game Over
         }
     }

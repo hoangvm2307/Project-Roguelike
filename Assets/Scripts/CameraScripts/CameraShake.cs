@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
+    public static CameraShake Instance;
+    public void Awake()
+    {
+        Instance = this;
+    }
     public float duration;
     public float magnitude;
     public IEnumerator Shake()

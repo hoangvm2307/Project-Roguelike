@@ -9,9 +9,14 @@ public class Room : MonoBehaviour
     public int x { get; set; }
     public int y { get; set; }
     private bool updatedDoors = false;
-
+    public string sceneName;
     public List<Door> doors = new List<Door>();
     public List<GameObject> enemies = new List<GameObject>();
+    public Room(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
     void Start()
     {
         width = 18;

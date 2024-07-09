@@ -29,46 +29,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
-        currentCell = new Vector2Int(0, 0);
+        currentCell = new Vector2Int(1, 0);
         playerInteraction = GetComponent<PlayerInteraction>();
     }
 
-    void Update()
-    {
-        ControlPlayerMove();
-    }
-    public void ControlPlayerMove()
-    {
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.right);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.left);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.up);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            if (RhythmManager.Instance.IsPlayerHit())
-            {
-                MovePlayer(Vector2Int.down);
-            }
-        }
-
-    }
     public void MovePlayer(Vector2Int direction)
     {
         onPlayerMove?.Invoke();
@@ -87,7 +51,18 @@ public class PlayerController : MonoBehaviour
             currentCell = newCell;
         }
     }
+    public void AttackEnemy(Vector2Int direction)
+    {
+        Vector2Int newCell = currentCell + direction;
+        Vector3 newPosition = new Vector3((newCell.x + 0.5f) * gridSize, (newCell.y + 0.5f) * gridSize, 0f);
 
+        if (playerInteraction.IsEnemyAtPosition(newPosition))
+        {
+            playerInteraction.AttackEnemyAtPosition(newPosition, GetWeaponDamage());
+            GameObject _slash = GameObject.Instantiate(slash, newPosition, Quaternion.identity);
+            AdjustSlashDirection(_slash, direction);
+        }
+    }
     public void MovePlayerThroughWall(Vector2Int direction)
     {
         Vector2Int newCell = currentCell + direction;
@@ -111,7 +86,7 @@ public class PlayerController : MonoBehaviour
         return hit.collider != null;
     }
 
-    private IEnumerator JumpToPosition(Vector3 endPosition)
+    public IEnumerator JumpToPosition(Vector3 endPosition)
     {
         boxCollider.enabled = false;
         Vector3 startPos = transform.position;

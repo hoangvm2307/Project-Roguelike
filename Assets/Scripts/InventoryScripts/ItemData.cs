@@ -8,7 +8,7 @@ public enum ItemType
     Item,
     Spell
 }
-[CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
+[CreateAssetMenu(fileName = "NewItem", menuName = "ScriptableObjects/Inventory/Item")]
 public class ItemData : ScriptableObject
 {
     public string itemName;
