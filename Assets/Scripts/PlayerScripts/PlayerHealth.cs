@@ -1,10 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerHealth", menuName = "ScriptableObjects/PlayerHealth", order = 1)]
 public class PlayerHealth : ScriptableObject
 {
     public int maxHealth = 5;
     public int currentHealth;
+
+    // Thêm sự kiện này
+    public static event System.Action OnPlayerDeath;
 
     public void ResetHealth()
     {
@@ -17,8 +20,9 @@ public class PlayerHealth : ScriptableObject
         if (currentHealth <= 0)
         {
             currentHealth = 0;
+       
+            OnPlayerDeath?.Invoke();
             UIManager.Instance.ShowEndGame();
-            //Notify Game Over
         }
     }
 

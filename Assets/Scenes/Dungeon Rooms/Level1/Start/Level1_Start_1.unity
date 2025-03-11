@@ -152,6 +152,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room
       objectReference: {fileID: 0}
+    - target: {fileID: 5337854025344160856, guid: da0e09df96d62db4382a689b9d7f5f3f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6496468378187098004, guid: da0e09df96d62db4382a689b9d7f5f3f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

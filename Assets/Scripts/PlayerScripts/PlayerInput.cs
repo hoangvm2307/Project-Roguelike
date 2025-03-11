@@ -5,17 +5,32 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     private PlayerController playerController;
+    private bool canControl = true;
     void Start()
     {
         playerController = GetComponent<PlayerController>();
-    }
 
-    // Update is called once per frame
+        PlayerHealth.OnPlayerDeath += DisablePlayerControl;
+    }
+    void OnDestroy()
+    {
+
+        PlayerHealth.OnPlayerDeath -= DisablePlayerControl;
+    }
+    private void DisablePlayerControl()
+    {
+        canControl = false;
+    }
+ 
     void Update()
     {
-        InventoryInput();
-        AttackInput();
-        MovementInput();
+        // Chỉ xử lý input khi có thể điều khiển
+        if (canControl)
+        {
+            InventoryInput();
+            AttackInput();
+            MovementInput();
+        }
     }
     private void MovementInput()
     {

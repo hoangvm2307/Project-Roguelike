@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     public void ShowEndGame()
     {
         endGameUI.SetActive(true);
-
+        //Time.timeScale = 0;
         canvasGroup.DOFade(1f, 1f);
     }
     
