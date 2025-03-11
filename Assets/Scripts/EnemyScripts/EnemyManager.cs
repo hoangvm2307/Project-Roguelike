@@ -20,7 +20,15 @@ public class EnemyManager : MonoBehaviour
             return _instance;
         }
     }
-
+    public static void ResetInstance()
+    {
+        _instance = null;
+    }
+    private void OnDestroy()
+    {
+        ResetInstance();
+        occupiedPositions.Clear();
+    }
     private HashSet<Vector2Int> occupiedPositions = new HashSet<Vector2Int>();
 
     public bool IsPositionOccupied(Vector2Int position)
