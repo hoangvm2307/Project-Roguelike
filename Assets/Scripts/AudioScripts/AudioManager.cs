@@ -1,28 +1,13 @@
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : SingletonBase<AudioManager>
 {
-    public AudioSource sfxSource; 
-    private static AudioManager instance;
+    public AudioSource sfxSource;
+
     [Header("Audio Clip")]
     public AudioClip itemPickupSound;
     public AudioClip otherSound;
-    public static AudioManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<AudioManager>();
-                if (instance == null)
-                {
-                    GameObject obj = new GameObject("AudioManager");
-                    instance = obj.AddComponent<AudioManager>();
-                }
-            }
-            return instance;
-        }
-    }
+
 
     public void PlayItemPickupSound()
     {
@@ -34,5 +19,5 @@ public class AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(otherSound);
     }
 
- 
+
 }
